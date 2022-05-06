@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_USER=dev
+      - POSTGRES_PASSWORD=dev123
+      - POSTGRES_DB=eksamen
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres:/var/lib/postgresql/data
+  hbase:
+    container_name: hbase
+    image: dajobe/hbase
+    restart: always
+    environment:
+      - HBASE_USER=dev
+      - HBASE=dev123
+    volumes:
+      - hbase:/var/lib/hbase/data
+volumes:
+  postgres:
+    driver: local
+  hbase:
+    driver: local
