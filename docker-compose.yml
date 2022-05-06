@@ -19,6 +19,13 @@ services:
     environment:
       - HBASE_USER=dev
       - HBASE=dev123
+    ports:
+    - '16010:16010'
+    - '9095:9095'
+    - '8085:8085'
+    - '9090:9090'
+    - '2181:2181'
+    - '8080:8080'
     volumes:
       - hbase:/var/lib/hbase/data
 volumes:

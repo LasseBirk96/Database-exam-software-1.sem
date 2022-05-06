@@ -1,4 +1,3 @@
-from webbrowser import get
 import happybase
 from connectorFiles.connector import establish_connection, get_version
 
