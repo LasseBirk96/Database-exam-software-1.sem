@@ -24,5 +24,3 @@ def get_version(conn):
 
     #Closing the connection
     conn.close()
-
-get_version(establish_connection())

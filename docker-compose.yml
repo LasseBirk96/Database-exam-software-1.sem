@@ -28,8 +28,22 @@ services:
     - '8080:8080'
     volumes:
       - hbase:/var/lib/hbase/data
+
+  mongo:
+    container_name: mongo
+    restart: always
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: dev
+      MONGO_INITDB_ROOT_PASSWORD: dev
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo:/var/lib/mongo/data
 volumes:
   postgres:
     driver: local
   hbase:
+    driver: local
+  mongo:
     driver: local
