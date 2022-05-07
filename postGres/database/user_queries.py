@@ -27,3 +27,25 @@ def persist_user(first_name, last_name, password, age, email, phone_number):
     finally:
         if conn is not None:
             conn.close()
+
+
+def user_login(user_email, user_password):
+    conn = establish_connection()
+    cur = conn.cursor() 
+    user_login_query = ("SELECT password FROM users WHERE email = %s")
+    try:
+        cur.execute(user_login_query, (user_email,))
+        password_from_db = cur.fetchall()
+        retrived_password = password_from_db[0] #Ved godt det her ser mega fucked ud, men der er nogle immutable datatypes og ting, og det her virker. Kan eventuelt kigge på det senere.
+        sql_data_password = retrived_password[0]
+        sql_pass = bytes(sql_data_password, encoding= 'utf-8')
+        password = bytes(user_password, encoding= 'utf-8')
+        if bcrypt.check_password_hash(sql_pass, password): # returns True
+            print("Successfully Logged User In")
+        else:
+            print("Incorrect Email or Password")
+    except (Exception) as error:
+        print("ERROR IN logging in",error)
+    finally:
+        if conn is not None:
+            conn.close()
