@@ -31,5 +31,13 @@ def populate_table(table):
     batcher.send()
 
 
-table = create_table
-populate_table(table)
+    table = create_table()
+    populate_table(table)
+
+connection = connect()
+table = connection.table("products")
+
+rows = table.rows([b"product"])
+for key, data in rows:
+    print(data) #This one prints all that data
+    print(data[b'product_id:ffd635b7-828f-467b-abea-e719c4347eb4']) #This prints the dictionary with this specific id
