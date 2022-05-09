@@ -1,15 +1,35 @@
 import happybase
+from utility import product_generator
+
 
 def connect():
     try:
-        connection = happybase.Connection(host='127.0.0.1')
-        #ONLY RUN THIS ONCE, IF YOU HAVEN'T SET UP THE DATABÆSE
-        connection.create_table('foods', {"cf1": dict()}) 
-        table = connection.table('foods')
-        print("CONNECTION SUCCESSFUL")
-        print(connection)
-        return table
+        connection = happybase.Connection(host="127.0.0.1")
+        return connection
     except:
-        print("This is a horrible error message that is only temporary, but if you see it, you are most likely connected to hbase")
+        print(
+            "This is a horrible error message that is only temporary, but if you see it, you are most likely connected to hbase"
+        )
 
-connect()
+
+def create_table():
+    connection = connect()
+    connection.create_table("products", {"product_id": dict()})
+    table = connection.table("products")
+    return table
+
+
+def populate_table(table):
+    table = create_table()
+    batcher = table.batch()
+    products = product_generator.return_big_data_products()
+
+    for element in products:
+        id = element.return_product()["product_id"]
+        column_string = str(f"product_id:{id}")
+        batcher.put(b"product", {column_string: str(element.return_product())})
+    batcher.send()
+
+
+table = create_table
+populate_table(table)
