@@ -1,58 +1,46 @@
+from flask import Flask, request
+from flask_restful import Resource, Api, reqparse
 from pymongo import MongoClient
-import uuid 
-import sys
-sys.path.append("..")
-from mongo.entities import order_entity 
-from mongo.entities import product_entity 
+from entities.Order import Order
+from entities.Product import Product
+from utility.mongo_commands import insert_order, get_orders, boot_db
 
-myuuid = uuid.uuid4()
-
-client = MongoClient("mongodb://dev:dev@localhost:27017/?authMechanism=DEFAULT")
-mydb = client["mydatabase"]
-mycol = mydb["customers"]
+app = Flask(__name__)
+api = Api(app)
 
 
-#x = mycol.insert_one(mydict)
-#print(x.inserted_id)
-print(mydb.list_collection_names())
-for x in mycol.find():
-    print(x)
+@app.route("/", methods=["GET"])
+def home():
+    return "<h1>HVIS DU SER DETTE SÅ KØRER SERVEREN</h1>"
 
 
-
-
-#mycol.insert_many(my_list)
-
-      
-def insert_order(user_id, uuid, product_id, product_name, product_brand, item_number, color, grill_type, amount_of_burners, bread_basket, amount_of_wheels, length_in_cm, width_in_cm, product_price):
-    product = product_entity(
-        product_id, 
-        product_name, 
-        product_brand, 
-        item_number, 
-        color, 
-        grill_type, 
-        amount_of_burners, 
-        bread_basket, 
-        amount_of_wheels, 
-        length_in_cm, 
-        width_in_cm, 
-        product_price
-        )
-
-    order = order_entity(user_id, str(uuid), [product]
+# CREATES AN ORDER
+@app.route("/order/create", methods=["POST"])
+def create_order():
+    data = request.get_json()
+    p = Product(
+        data["product_id"],
+        data["product_name"],
+        data["product_brand"],
+        data["item_number"],
+        data["color"],
+        data["grill_type"],
+        data["amount_of_burners"],
+        data["bread_basket"],
+        data["amount_of_wheels"],
+        data["length_in_cm"],
+        data["width_in_cm"],
+        data["product_price"],
     )
-
-    mycol.insert_many(order)
-
-def get_orders(collection, user_id):
-    print(collection.find_one({"user_id": user_id}))
-
-get_orders(mycol, "1") 
+    insert_order(boot_db(), 7, p.return_product())
+    return "Persisted order successfully"
 
 
-insert_order("3", myuuid, "1", "Grill", "Weber", "2", "black", "gas", "3", "yes", "4", "75", "95", "9999")
+# GET ORDERS BY USER ID
+@app.route("/order/<id>", methods=["GET"])
+def get(id):
+    return "Returned: " + get_orders(boot_db(), int(id))
 
 
-
-client.close()
+if __name__ == "__main__":
+    app.run()
