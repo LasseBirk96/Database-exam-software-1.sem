@@ -44,7 +44,7 @@ def create_order():
 def get(id):
     return "Returned: " + get_orders(boot_db(), int(id))
 
-
+# DELETES ORDER BY ORDER ID
 @app.route("/order/delete/<id>", methods=["DELETE"])
 def delete(id):
     return "Returned: " + delete_order(boot_db(), str(id))
