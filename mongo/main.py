@@ -3,15 +3,18 @@ from flask_restful import Resource, Api, reqparse
 from pymongo import MongoClient
 from entities.Order import Order
 from entities.Product import Product
-from utility.mongo_commands import insert_order, get_orders, boot_db
+from utility.mongo_commands import insert_order, get_orders, boot_db, delete_order
 
 app = Flask(__name__)
 api = Api(app)
 
 
+
+#Just to provide proof of CRUD
+
 @app.route("/", methods=["GET"])
 def home():
-    return "<h1>HVIS DU SER DETTE SÅ KØRER SERVEREN</h1>"
+    return "<h1>HVIS DU SER DETTE SÅ KØRER MONGO SERVEREN</h1>"
 
 
 # CREATES AN ORDER
@@ -40,6 +43,11 @@ def create_order():
 @app.route("/order/<id>", methods=["GET"])
 def get(id):
     return "Returned: " + get_orders(boot_db(), int(id))
+
+
+@app.route("/order/delete/<id>", methods=["DELETE"])
+def delete(id):
+    return "Returned: " + delete_order(boot_db(), str(id))
 
 
 if __name__ == "__main__":

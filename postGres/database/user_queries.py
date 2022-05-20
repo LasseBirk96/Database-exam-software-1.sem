@@ -21,13 +21,12 @@ def persist_user(first_name, last_name, password, age, email, phone_number):
     try:
         cur.execute(persist_user_query, user.return_user())
         conn.commit()
-        print("Successfully committed user to databæse")
+        print("Successfully committed user " + email + " to databæse")
     except (Exception) as error:
         print("ERROR IN persistence",error)
     finally:
         if conn is not None:
             conn.close()
-
 
 def user_login(user_email, user_password):
     conn = establish_connection()
@@ -41,11 +40,55 @@ def user_login(user_email, user_password):
         sql_pass = bytes(sql_data_password, encoding= 'utf-8')
         password = bytes(user_password, encoding= 'utf-8')
         if bcrypt.check_password_hash(sql_pass, password): # returns True
-            print("Successfully Logged User In")
+            print("Successfully logged " + user_email + " in")
         else:
-            print("Incorrect Email or Password")
+            print("FAILED LOG IN")
     except (Exception) as error:
         print("ERROR IN logging in",error)
+    finally:
+        if conn is not None:
+            conn.close()
+
+
+def delete_user(user_email):
+    conn = establish_connection()
+    cur = conn.cursor() 
+    user_delete_query = ("DELETE FROM users WHERE email = %s")
+    try:
+        cur.execute(user_delete_query, (user_email,))
+        conn.commit()
+        print("Successfully deleted user", user_email)
+    except (Exception) as error:
+        print("ERROR IN deleting",error)
+    finally:
+        if conn is not None:
+            conn.close()
+
+
+def update_user(user_email, new_phonenumber):
+    conn = establish_connection()
+    cur = conn.cursor() 
+    user_delete_query = ("UPDATE users SET phonenumber = %s WHERE email = %s")
+    try:
+        cur.execute(user_delete_query, (new_phonenumber, user_email))
+        conn.commit()
+        print("Successfully updated user " + user_email + " phonenumber to " + new_phonenumber)
+    except (Exception) as error:
+        print("ERROR IN deleting",error)
+    finally:
+        if conn is not None:
+            conn.close()
+
+def get_user(user_email):
+    conn = establish_connection()
+    cur = conn.cursor() 
+    user_delete_query = ("SELECT * FROM users WHERE email = %s")
+    try:
+        cur.execute(user_delete_query, (user_email,))
+        user = cur.fetchall()
+        print("Successfully retrieved user ", user)
+    except (Exception) as error:
+        print("ERROR IN selecting",error)
     finally:
         if conn is not None:
             conn.close()

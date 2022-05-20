@@ -25,3 +25,8 @@ def get_orders(collection, user_id):
     retrieved_data = collection.find_one({"user_id": user_id})
     data = json.dumps(str(retrieved_data))
     return data
+
+#Deletes order by id
+def delete_order(collection, order_id):
+    collection.delete_one({"order_id": order_id})
+    return "Successfully deleted order " + order_id
