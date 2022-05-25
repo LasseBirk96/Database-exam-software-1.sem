@@ -55,6 +55,37 @@ services:
     volumes: 
       - redis:/var/lib/redis/data
      
+  python3:
+    build: .
+    container_name: python3
+    command: python3 main.py
+    environment:
+      # POSTGRES
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=dev
+      - POSTGRES_PASSWORD=dev123
+      - POSTGRES_DB=eksamen
+      # MONGO
+      - MONGO_HOST=mongo
+      - MONGO_USER=dev
+      - MONGO_PASSWORD=dev
+      - MONGO_PORT=27017
+      # HBASE
+      - HBASE_HOST=hbase
+      - HBASE_PORT=16010
+      - HBASE_USER=dev
+      - HBASE_DB=dev123
+    depends_on:
+      - postgres
+      - hbase
+      - mongo
+    volumes:
+      - python3:/var/lib/python3/data
+    ports:
+      - 5000:5000
+
+
 
 volumes:
   postgres:
@@ -64,4 +95,6 @@ volumes:
   mongo:
     driver: local
   redis:
+    driver: local
+  python3:
     driver: local

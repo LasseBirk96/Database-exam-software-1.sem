@@ -1,13 +1,15 @@
 from psycopg2 import connect
+import os
 
 #establishing the connection
 
 def establish_connection():
     conn = connect(
-        host = "127.0.0.1",
-        user = "dev",
-        password = "dev123",
-        dbname = "eksamen"
+        dbname = os.environ.get('POSTGRES_DB'),
+        user = os.environ.get('POSTGRES_USER'),
+        password = os.environ.get('POSTGRES_PASSWORD'),
+        host = os.environ.get('POSTGRES_HOST'),
+        port = os.environ.get('POSTGRES_PORT')
     )
     return conn
 

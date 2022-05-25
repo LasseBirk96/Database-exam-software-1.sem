@@ -2,13 +2,18 @@ from pymongo import MongoClient
 import uuid
 from entities.Order import Order
 import json
+import os 
 
 # This simply boots a collection
 def boot_db():
-    client = MongoClient(
-        "mongodb://dev:dev@localhost:27017/?authMechanism=DEFAULT",
-        uuidRepresentation="standard",
-    )
+    host = os.environ.get('MONGO_HOST')
+    user = os.environ.get('MONGO_USER')
+    password = os.environ.get('MONGO_PASSWORD')
+    port = os.environ.get('MONGO_PORT')
+
+    dsn = "mongodb://{}:{}@{}:{}/?authMechanism=DEFAULT".format(user, password, host, port)
+
+    client = MongoClient(dsn, uuidRepresentation="standard")
     mydb = client["DatabaseEksamen"]
     mycol = mydb["Order"]
     return mycol

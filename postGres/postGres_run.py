@@ -1,0 +1,72 @@
+from __main__ import app
+from flask import Flask, request, jsonify
+from flask_restful import Resource, Api, reqparse
+from utility import user_jwt
+from .database import user_queries
+
+
+@app.route("/postgres", methods=["GET"])
+def postgreshome():
+    return "<h1>HVIS DU SER DETTE SÅ KØRER POSTGRES</h1>"
+
+
+# PERSISTS A USER
+@app.route("/postgres/user/persist", methods=["POST"])
+def persist_user():
+    data = request.get_json()
+    user = user_queries.persist_user(
+        data["first_name"],
+        data["last_name"],
+        data["password"],
+        data["age"],
+        data["email"],
+        data["phonenumber"],
+    )
+    return jsonify(user)
+
+
+@app.route("/postgres/user/whoami", methods=["GET"])
+def whoami():
+    if not request.headers.has_key("Authorization"):
+        return jsonify({"error": "You are not authorized"})
+
+    bearer = request.headers.get("Authorization")
+    token = bearer[len("Bearer ") :]
+
+    decoded = user_jwt.decode_access_token(token)
+
+    user = user_queries.get_user_by_id(decoded["sub"])
+
+    return jsonify(user)
+
+
+@app.route("/postgres/user/log", methods=["POST"])
+def user_log_in():
+    data = request.get_json()
+    user_id = user_queries.user_login(data["email"], data["password"])
+
+    return jsonify(user_jwt.get_access_token(user_id))
+
+
+# DELETES A USER
+@app.route("/postgres/user/delete", methods=["DELETE"])
+def delete_user():
+    data = request.get_json()
+    deleted_user = user_queries.delete_user(data["email"])
+    return jsonify(deleted_user)
+
+
+# UPDATES A USER
+@app.route("/postgres/user/update", methods=["PUT"])
+def update_user():
+    data = request.get_json()
+    update = user_queries.update_user(data["email"], data["new_phonenumber"])
+    return jsonify(update)
+
+
+# READS A USER
+@app.route("/postgres/user/select", methods=["GET"])
+def get_user():
+    data = request.get_json()
+    user = user_queries.get_user(data["email"])
+    return jsonify(user)
