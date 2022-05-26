@@ -2,7 +2,7 @@ from __main__ import app
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api, reqparse
 from utility import user_jwt
-from .database import user_queries
+from .database import user_queries, table
 
 
 @app.route("/postgres", methods=["GET"])

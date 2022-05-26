@@ -11,8 +11,7 @@ services:
       - POSTGRES_DB=eksamen
     ports:
       - '5432:5432'
-    volumes:
-      - postgres:/var/lib/postgresql/data
+
 
   hbase:
     container_name: hbase
@@ -28,8 +27,7 @@ services:
     - '9090:9090'
     - '2181:2181'
     - '8080:8080'
-    volumes:
-      - hbase:/var/lib/hbase/data
+
 
   mongo:
     container_name: mongo
@@ -40,8 +38,6 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: dev
     ports:
       - "27017:27017"
-    volumes:
-      - mongo:/var/lib/mongo/data
 
   redis:
     container_name: xredis
@@ -52,8 +48,7 @@ services:
       - PASSWORD=dev123
     ports:
       - '6379:6379'
-    volumes: 
-      - redis:/var/lib/redis/data
+
      
   python3:
     build: .
@@ -80,21 +75,5 @@ services:
       - postgres
       - hbase
       - mongo
-    volumes:
-      - python3:/var/lib/python3/data
     ports:
       - 5000:5000
-
-
-
-volumes:
-  postgres:
-    driver: local
-  hbase:
-    driver: local
-  mongo:
-    driver: local
-  redis:
-    driver: local
-  python3:
-    driver: local
