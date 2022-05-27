@@ -12,7 +12,6 @@ services:
     ports:
       - '5432:5432'
 
-
   hbase:
     container_name: hbase
     image: dajobe/hbase
@@ -27,7 +26,6 @@ services:
     - '9090:9090'
     - '2181:2181'
     - '8080:8080'
-
 
   mongo:
     container_name: mongo
@@ -48,8 +46,7 @@ services:
       - PASSWORD=dev123
     ports:
       - '6379:6379'
-
-     
+ 
   python3:
     build: .
     container_name: python3

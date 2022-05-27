@@ -1,10 +1,11 @@
+import sys
+
+sys.path.append("mongo")
 from pymongo import MongoClient
 import uuid
 from entities.Product import Product
-from utility.mongo_commands import insert_order, boot_db
+from database.mongo_commands import insert_order, boot_db
 
-
-# Det er mega scuffed i know, det er bare til en test okay? fat det
 def generate_lists_with_data():
     # All products have the same UUID right now, this is just a test thing, this will change
     test_myuuid = uuid.uuid4()
@@ -98,11 +99,10 @@ def generate_lists_with_data():
 
 
 # This runs the test, creates a db and populates it
-def run():
+def run_setup():
     generated_lists = generate_lists_with_data()
     insert_order(boot_db(), 1, generated_lists[0])
     insert_order(boot_db(), 2, generated_lists[1])
     insert_order(boot_db(), 3, generated_lists[2])
 
 
-run()

@@ -3,7 +3,8 @@ import os
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api, reqparse
 sys.path.append("..")
-from postGres import setup
+from postGres import postgres_setup
+from mongo import mongo_setup
 
 app = Flask(__name__)
 api = Api(app)
@@ -17,7 +18,8 @@ def home():
     return "<h1>HVIS DU SER DETTE SÅ KØRER DET</h1>"
 
 if __name__ == "__main__":
-    setup.run_setup()
+    mongo_setup.run_setup()
+    postgres_setup.run_setup()
     port = int(os.environ.get('PORT', 5000))
     app.run(debug=True, host='0.0.0.0', port=port)
 
