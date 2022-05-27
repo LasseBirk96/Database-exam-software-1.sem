@@ -7,11 +7,13 @@ from postGres import postgres_setup
 from mongo import mongo_setup
 from xhbase import hbase_setup
 
+
 app = Flask(__name__)
 api = Api(app)
 #THESE ARE NOT TO BE MOVED
 from postGres import postGres_run
 from mongo import mongo_run
+from xhbase import hbase_run
 
 
 @app.route("/home", methods=["GET"])
