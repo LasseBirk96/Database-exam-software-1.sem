@@ -1,5 +1,6 @@
 version: '3.8'
 services:
+
   postgres:
     container_name: postgres
     image: postgres:latest
@@ -10,8 +11,8 @@ services:
       - POSTGRES_DB=eksamen
     ports:
       - '5432:5432'
-    volumes:
-      - postgres:/var/lib/postgresql/data
+
+
   hbase:
     container_name: hbase
     image: dajobe/hbase
@@ -26,8 +27,7 @@ services:
     - '9090:9090'
     - '2181:2181'
     - '8080:8080'
-    volumes:
-      - hbase:/var/lib/hbase/data
+
 
   mongo:
     container_name: mongo
@@ -38,12 +38,42 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: dev
     ports:
       - "27017:27017"
-    volumes:
-      - mongo:/var/lib/mongo/data
-volumes:
-  postgres:
-    driver: local
-  hbase:
-    driver: local
-  mongo:
-    driver: local
+
+  redis:
+    container_name: xredis
+    image: redis:latest
+    restart: always
+    environment:
+      - REDIS_USER=dev
+      - PASSWORD=dev123
+    ports:
+      - '6379:6379'
+
+     
+  python3:
+    build: .
+    container_name: python3
+    command: python3 main.py
+    environment:
+      # POSTGRES
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=dev
+      - POSTGRES_PASSWORD=dev123
+      - POSTGRES_DB=eksamen
+      # MONGO
+      - MONGO_HOST=mongo
+      - MONGO_USER=dev
+      - MONGO_PASSWORD=dev
+      - MONGO_PORT=27017
+      # HBASE
+      - HBASE_HOST=hbase
+      - HBASE_PORT=16010
+      - HBASE_USER=dev
+      - HBASE_DB=dev123
+    depends_on:
+      - postgres
+      - hbase
+      - mongo
+    ports:
+      - 5000:5000

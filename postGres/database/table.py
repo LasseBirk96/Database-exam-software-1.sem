@@ -1,4 +1,6 @@
-from database.connector import establish_connection
+import sys
+sys.path.append("..")
+from .connector import establish_connection
 
 
 # Allows us to set up any table in postgres that we might want. However in this case, we will never need more than just the user_table

@@ -1,4 +1,7 @@
-from database import table, user_queries
+
+
+
+from .database import table, user_queries
 
 def run_setup():
 
@@ -9,7 +12,7 @@ def run_setup():
 
     #PERSISTS A USER
     user_queries.persist_user("Albus", "Dumbledore", "supersecretPassword", 110, "grindelwald4lyfe@gmail.com", "32435465")
-    user_queries.persist_user("Tony", "Soprano", "juniorsucks", 50, "soprano@gmail.com", "82282882")
+    user_queries.persist_user("Tony", "Poulsen", "juniorsucks", 50, "soprano@gmail.com", "82282882")
 
     #Successful login
     user_queries.user_login("grindelwald4lyfe@gmail.com", "supersecretPassword")
@@ -24,4 +27,3 @@ def run_setup():
     user_queries.update_user("soprano@gmail.com", "32984234")
 
 
-run_setup()
