@@ -50,7 +50,6 @@ services:
   python3:
     build: .
     container_name: python3
-    command: python3 main.py
     environment:
       # POSTGRES
       - POSTGRES_HOST=postgres
@@ -65,9 +64,8 @@ services:
       - MONGO_PORT=27017
       # HBASE
       - HBASE_HOST=hbase
-      - HBASE_PORT=16010
-      - HBASE_USER=dev
-      - HBASE_DB=dev123
+      - HBASE_PORT=9090
+
     depends_on:
       - postgres
       - hbase

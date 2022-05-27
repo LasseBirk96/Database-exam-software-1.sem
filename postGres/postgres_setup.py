@@ -1,11 +1,6 @@
-
-
-
 from .database import table, user_queries
 
 def run_setup():
-
-    #This is just to provide proof of CRUD operations, delete table first if you already have one version up
 
     #SETS UP THE TABLE
     table.set_up_user_table()

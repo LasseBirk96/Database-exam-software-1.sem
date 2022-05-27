@@ -1,5 +1,5 @@
 import happybase
-from utility import product_generator
+from data_generator import product_generator
 
 
 def connect():
@@ -14,6 +14,7 @@ def connect():
 
 def create_table():
     connection = connect()
+    connection.open()
     connection.create_table("products", {"product_id": dict()})
     table = connection.table("products")
     return table

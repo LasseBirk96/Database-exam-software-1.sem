@@ -1,8 +1,8 @@
 import sys
 
-sys.path.append("..")
-import databaseEksamen.hbase.utility.data_for_generating as d
-from databaseEksamen.hbase.entities.Product import Product
+sys.path.append("xhbase")
+from data_generator import data_for_generating as d
+from xhbase.entities.Product import Product
 
 # Ja, det her import er scuffed, men du ved hvordan python er med imports :)(
 

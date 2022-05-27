@@ -5,6 +5,7 @@ from flask_restful import Resource, Api, reqparse
 sys.path.append("..")
 from postGres import postgres_setup
 from mongo import mongo_setup
+from xhbase import hbase_setup
 
 app = Flask(__name__)
 api = Api(app)
@@ -20,6 +21,7 @@ def home():
 if __name__ == "__main__":
     mongo_setup.run_setup()
     postgres_setup.run_setup()
+    hbase_setup.run_setup()
     port = int(os.environ.get('PORT', 5000))
-    app.run(debug=True, host='0.0.0.0', port=port)
+    app.run(debug=False, host='0.0.0.0', port=port)
 

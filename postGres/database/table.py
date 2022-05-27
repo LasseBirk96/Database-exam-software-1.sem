@@ -18,11 +18,10 @@ def set_up_table(command):
         if conn is not None:
             conn.close()
 
-
 # Returns the sql query that creates a user_table
 def return_user_table():
     user_table = """
-    CREATE TABLE users (
+    CREATE TABLE IF NOT EXISTS users (
 	user_id VARCHAR(255) primary KEY,
         first_name VARCHAR(255) not NULL,
         last_name VARCHAR(255) not NULL,
