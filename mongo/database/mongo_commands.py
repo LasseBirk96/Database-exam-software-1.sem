@@ -18,7 +18,6 @@ def boot_db():
     mycol = mydb["Order"]
     return mycol
 
-
 def insert_order(collection, user_id, products):
     test_myuuid1 = uuid.uuid4()
     order = Order(user_id, str(test_myuuid1), products)
@@ -31,7 +30,12 @@ def get_orders(collection, user_id):
     data = json.dumps(str(retrieved_data))
     return data
 
-#Deletes order by id
+# Deletes order by id
 def delete_order(collection, order_id):
     collection.delete_one({"order_id": order_id})
     return "Successfully deleted order " + order_id
+
+# Update order by id
+def update_order(collection, order_id, item, new_value):
+    collection.update({"order_id": order_id}, {"$set": {item: new_value}})
+    return "Successfully updated order " + order_id
