@@ -14,7 +14,7 @@ api = Api(app)
 from postGres import postGres_run
 from mongo import mongo_run
 from xhbase import hbase_run
-
+from xredis import redis_run
 
 @app.route("/home", methods=["GET"])
 def home():

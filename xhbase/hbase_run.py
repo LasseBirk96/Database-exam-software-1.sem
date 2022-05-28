@@ -15,6 +15,9 @@ def hbasehome():
 def get_all_summer_products():
     connection = hbase_commands.connect()
     table = connection.table("products")
-    rows = table.rows([b"summer_product"])
+    rows = table.scan("summer_product")
     for key, data in rows:
-        return str(data)
+        unidict = dict((k.decode('utf8'), v.decode('utf8')) for k, v in data.items())
+        return unidict
+
+        
