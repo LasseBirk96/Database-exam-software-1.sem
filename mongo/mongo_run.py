@@ -49,54 +49,27 @@ def mongohome():
 @requires_user
 def create_order():
     user_id = session.get("user_id")
-    product_list = [
-        "1",
-        "2"
-    ]
-
-    # api_endpoint = "TBD"
-    # r = requests.post(url = api_endpoint, data = product_list)
-    # response = r.json
+    data = request.get_json()
     list_of_products = []
-    for products in product_list:
-        product = thisdemonstratestheapicalltoredisgigascuffednametho(products)
-        list_of_products.append(product)
+    for element in data:
+        product = Product(
+            element["product_id"],
+            element["product_name"],
+            element["product_brand"],
+            element["item_number"],
+            element["color"],
+            element["grill_type"],
+            element["amount_of_burners"],
+            element["bread_basket"],
+            element["amount_of_wheels"],
+            element["length_in_cm"],
+            element["width_in_cm"],
+            element["product_price"],
+        )
+        list_of_products.append(product.return_product())
 
     insert_order(boot_db(), user_id, list_of_products)
     return "Persisted order successfully"
-
-def thisdemonstratestheapicalltoredisgigascuffednametho(x):
-    if x == "1":
-         return {
-            "product_id": "123", 
-            "product_name": "Grill",
-            "product_brand": "Weber", 
-            "item_number" : "1",
-            "color" : "Black",
-            "grill_type" : "Gas",
-            "amount_of_burners" : "6",
-            "bread_basket" : "Yes",
-            "amount_of_wheels" : "6",
-            "length_in_cm" : "120",
-            "width_in_cm" : "80",
-            "product_price": "9000"
-            }
-    
-    if x == "2":
-         return {
-            "product_id": "12345", 
-            "product_name": "Grill",
-            "product_brand": "Weber", 
-            "item_number" : "1",
-            "color" : "Black",
-            "grill_type" : "Gas",
-            "amount_of_burners" : "6",
-            "bread_basket" : "Yes",
-            "amount_of_wheels" : "6",
-            "length_in_cm" : "120",
-            "width_in_cm" : "80",
-            "product_price": "9000"
-            }
 
 # GET ORDERS BY USER ID
 @app.route("/mongo/order", methods=["GET"])
