@@ -36,9 +36,6 @@ def requires_user(f):
     return wrapper
 
 
-# Just to provide proof of CRUD
-
-
 @app.route("/mongo", methods=["GET"])
 def mongohome():
     return "<h1>HVIS DU SER DETTE SÅ KØRER MONGO SERVEREN</h1>"
@@ -83,10 +80,3 @@ def get():
 def delete(id):
     return "Returned: " + delete_order(boot_db(), str(id))
 
-# Updates order by order id
-# @app.route("/mongo/order/update/<id>", methods=["UPDATE"])
-# def update(id):
-#     data = request.get_json()
-#     item = data[""]
-#     new_item = data[""]
-#     return "Returned: " + update_order(boot_db(), str(id), item, new_item)

@@ -38,7 +38,7 @@ services:
       - "27017:27017"
 
   redis:
-    container_name: xredis
+    container_name: redis
     image: redis:latest
     restart: always
     environment:
@@ -65,10 +65,14 @@ services:
       # HBASE
       - HBASE_HOST=hbase
       - HBASE_PORT=9090
+      # REDIS
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
 
     depends_on:
       - postgres
       - hbase
       - mongo
+      - redis
     ports:
       - 5000:5000
