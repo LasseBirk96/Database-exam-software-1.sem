@@ -1,15 +1,15 @@
+'''THIS CLASS IS FOR GENERATING PRODUCTS'''
 import sys
 
 sys.path.append("xhbase")
 from data_generator import data_for_generating as d
 from xhbase.entities.Product import Product
 
-# Ja, det her import er scuffed, men du ved hvordan python er med imports :)(
 
-
-def return_big_data_products():
+def return_big_data_products(amount_data_products_to_be_generated):
+    '''Returns a list of generated products'''
     list_of_products = []
-    for i in range(10000):
+    for i in range(amount_data_products_to_be_generated):
         p = Product(
             d.return_product_id(),
             d.return_grill_name(),

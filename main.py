@@ -1,12 +1,12 @@
+'''THIS IS THE MAIN CLASS FROR THE ENTIRE PROJECT, THIS GETS RUN IN THE DOCKERFILE'''
 import sys
 import os
-from flask import Flask, request, jsonify
-from flask_restful import Resource, Api, reqparse
+from flask import Flask
+from flask_restful import Api
 sys.path.append("..")
 from postGres import postgres_setup
 from mongo import mongo_setup
 from xhbase import hbase_setup
-
 
 app = Flask(__name__)
 api = Api(app)

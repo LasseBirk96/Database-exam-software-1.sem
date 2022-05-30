@@ -12,6 +12,7 @@ def redishome():
 
 @app.route("/redis/populate", methods=["POST"])
 def redispopulate():
+    '''Populate redis with products'''
     data = request.get_json()
     redis_commands.set_summer_products(data)
     return "Send data to redis"
@@ -19,6 +20,7 @@ def redispopulate():
 
 @app.route("/redis/get", methods=["GET"])
 def redisget():
+    '''Get all products from redis'''
     data = redis_commands.get_products_from_redis()
     return data
 

@@ -13,6 +13,7 @@ def hbasehome():
 
 @app.route("/hbase/summerproducts/", methods=["GET"])
 def get_all_summer_products():
+    '''this gets all products with the rowkey summer_product from hbase'''
     connection = hbase_commands.connect()
     table = connection.table("products")
     rows = table.scan("summer_product")

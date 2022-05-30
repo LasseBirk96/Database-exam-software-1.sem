@@ -1,3 +1,4 @@
+'''THIS CLASS IS ONLY FOR PROVIDING DATA TO THE PRODUCT GENERATOR'''
 import random
 import uuid
 

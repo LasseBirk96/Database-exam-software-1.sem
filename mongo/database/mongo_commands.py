@@ -7,7 +7,7 @@ from entities.Order import Order
 from pymongo import MongoClient
 
 def boot_db():
-    """This establishes connection to our mongo db, specifically Databaseeksamen/Order."""
+    """This establishes connection to our mongo db."""
     host = os.environ.get("MONGO_HOST")
     user = os.environ.get("MONGO_USER")
     password = os.environ.get("MONGO_PASSWORD")
@@ -27,6 +27,7 @@ def insert_order(collection, user_id, products):
     test_myuuid1 = uuid.uuid4()
     order = Order(user_id, str(test_myuuid1), products)
     collection.insert_one(order.return_order())
+    return "Succesfully created order"
 
 
 def get_orders(collection, user_id):

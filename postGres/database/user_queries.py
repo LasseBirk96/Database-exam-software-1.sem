@@ -1,11 +1,12 @@
+'''THIS CLASS CONTAINS ALL METHODS THAT QUERY THE POSTGRES DATABASE'''
+import uuid
 import sys
 
 sys.path.append("postGres")
-import uuid
+
 from .connector import establish_connection
 from flask_bcrypt import Bcrypt
 from flask import Flask
-import uuid
 from entities.User import User
 
 app = Flask(__name__)
@@ -13,6 +14,7 @@ bcrypt = Bcrypt(app)
 
 
 def persist_user(first_name, last_name, password, age, email, phone_number):
+    '''This method persists a user'''
     user_id = str(uuid.uuid4())
     passwd = bytes(
         password, encoding="utf-8"
@@ -38,6 +40,7 @@ def persist_user(first_name, last_name, password, age, email, phone_number):
 
 
 def user_login(user_email, user_password):
+    '''This method allows the user to log in'''
     conn = establish_connection()
     cur = conn.cursor()
     user_login_query = "SELECT user_id, password FROM users WHERE email = %s"
@@ -59,6 +62,7 @@ def user_login(user_email, user_password):
 
 
 def delete_user(user_email):
+    '''This allows us to delete a user'''
     conn = establish_connection()
     cur = conn.cursor()
     user_delete_query = "DELETE FROM users WHERE email = %s"
@@ -74,6 +78,7 @@ def delete_user(user_email):
 
 
 def update_user(user_email, new_phonenumber):
+    '''This allows us to update the users phonenumber'''
     conn = establish_connection()
     cur = conn.cursor()
     user_delete_query = "UPDATE users SET phonenumber = %s WHERE email = %s"
@@ -94,6 +99,7 @@ def update_user(user_email, new_phonenumber):
 
 
 def get_user_by_id(user_id):
+    '''This allows us to get the user by their id'''
     conn = establish_connection()
     cur = conn.cursor()
     user_delete_query = "SELECT * FROM users WHERE user_id = %s"
@@ -109,6 +115,7 @@ def get_user_by_id(user_id):
 
 
 def get_user(user_email):
+    '''This allows us to get the user by their email'''
     conn = establish_connection()
     cur = conn.cursor()
     user_delete_query = "SELECT * FROM users WHERE email = %s"

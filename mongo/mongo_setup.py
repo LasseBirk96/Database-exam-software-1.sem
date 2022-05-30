@@ -1,12 +1,14 @@
+'''THIS CLASS POPULATES MONGO WITH DUMMY DATA'''
 import sys
-
+import uuid
 sys.path.append("mongo")
 from pymongo import MongoClient
-import uuid
 from entities.Product import Product
 from database.mongo_commands import insert_order, boot_db
 
+
 def generate_lists_with_data():
+    '''This creates some products, appends them to lists, and returns those lists'''
     # All products have the same UUID right now, this is just a test thing, this will change
     test_myuuid = uuid.uuid4()
 
@@ -95,14 +97,9 @@ def generate_lists_with_data():
     return list_of_products, list_of_more_products, test_list
 
 
-# Inserter order, works well, does need some tunning in the future
-
-
-# This runs the test, creates a db and populates it
 def run_setup():
+    '''This populates mongo with dummy data'''
     generated_lists = generate_lists_with_data()
     insert_order(boot_db(), 1, generated_lists[0])
     insert_order(boot_db(), 2, generated_lists[1])
     insert_order(boot_db(), 3, generated_lists[2])
-
-

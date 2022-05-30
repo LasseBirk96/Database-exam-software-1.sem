@@ -1,10 +1,13 @@
+"""THIS CLASS DOES THINGS WITH OUR POSTGRES"""
 import sys
+
 sys.path.append("..")
 from .connector import establish_connection
 
 
-# Allows us to set up any table in postgres that we might want. However in this case, we will never need more than just the user_table
 def set_up_table(command):
+    """This methods allows us to execute on or more quieres.
+    However, in our case it is only used to set up one table"""
     conn = establish_connection()
     cur = conn.cursor()
     try:
@@ -18,8 +21,9 @@ def set_up_table(command):
         if conn is not None:
             conn.close()
 
-# Returns the sql query that creates a user_table
+
 def return_user_table():
+    """This method returns the SQL for creating a table called users"""
     user_table = """
     CREATE TABLE IF NOT EXISTS users (
 	user_id VARCHAR(255) primary KEY,
@@ -35,5 +39,6 @@ def return_user_table():
 
 
 def set_up_user_table():
+    """This method creates and sets up our table"""
     user_table = return_user_table()
     set_up_table(user_table)

@@ -1,3 +1,4 @@
+'''THIS CLASS CONTAINS ALL API WORK FOR POSTGRES'''
 from __main__ import app
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api, reqparse
@@ -7,12 +8,14 @@ from .database import user_queries, table
 
 @app.route("/postgres", methods=["GET"])
 def postgreshome():
+    '''This is just a tester, to see if things are running'''
     return "<h1>HVIS DU SER DETTE SÅ KØRER POSTGRES</h1>"
 
 
 # PERSISTS A USER
 @app.route("/postgres/user/persist", methods=["POST"])
 def persist_user():
+    '''This is the endpoint for persisting a user'''
     data = request.get_json()
     user = user_queries.persist_user(
         data["first_name"],
@@ -27,6 +30,7 @@ def persist_user():
 
 @app.route("/postgres/user/whoami", methods=["GET"])
 def whoami():
+    '''This endpoint returns the data of a logged in user'''
     if not request.headers.has_key("Authorization"):
         return jsonify({"error": "You are not authorized"})
 
@@ -40,8 +44,9 @@ def whoami():
     return jsonify(user)
 
 
-@app.route("/postgres/user/log", methods=["POST"])
+@app.route("/postgres/user/login", methods=["POST"])
 def user_log_in():
+    '''This endpoint allows a user to log-in'''
     data = request.get_json()
     user_id = user_queries.user_login(data["email"], data["password"])
 
@@ -51,6 +56,7 @@ def user_log_in():
 # DELETES A USER
 @app.route("/postgres/user/delete", methods=["DELETE"])
 def delete_user():
+    '''This endpoint allows a user to be deleted'''
     data = request.get_json()
     deleted_user = user_queries.delete_user(data["email"])
     return jsonify(deleted_user)
@@ -59,6 +65,7 @@ def delete_user():
 # UPDATES A USER
 @app.route("/postgres/user/update", methods=["PUT"])
 def update_user():
+    '''This endpoints lets a user be updated'''
     data = request.get_json()
     update = user_queries.update_user(data["email"], data["new_phonenumber"])
     return jsonify(update)
@@ -67,6 +74,7 @@ def update_user():
 # READS A USER
 @app.route("/postgres/user/select", methods=["GET"])
 def get_user():
+    '''This endpoint gets a user from a email'''
     data = request.get_json()
     user = user_queries.get_user(data["email"])
     return jsonify(user)

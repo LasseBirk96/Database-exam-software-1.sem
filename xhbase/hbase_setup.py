@@ -1,3 +1,4 @@
+'''THIS FOR HBASE SETUP'''
 import happybase
 import random
 import os
@@ -5,10 +6,12 @@ from .data_generator import product_generator
 
 
 def connect():
-        connection = happybase.Connection(host = os.environ.get('HBASE_HOST'))
-        return connection
+    '''Returns connection'''
+    connection = happybase.Connection(host = os.environ.get('HBASE_HOST'))
+    return connection
 
 def create_our_table():
+    '''Creates our hbase table'''
     connection = connect()
     try:
         #Check if you have to specify dictionary 
@@ -20,8 +23,9 @@ def create_our_table():
 
 
 def populate_table(table):
+    '''Populates our hbase table with generated products'''
     batcher = table.batch()
-    products = product_generator.return_big_data_products()
+    products = product_generator.return_big_data_products(10000)
     number = 1
     for element in products:
         column_string = str(f"cf:{number}")
@@ -34,11 +38,8 @@ def populate_table(table):
     batcher.send()
 
 
-
-
-
-
 def run_setup():
+    '''Setup for hbase'''
     table = create_our_table()
     populate_table(table)
 

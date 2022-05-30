@@ -1,21 +1,22 @@
-import requests
+"""THIS CONTAINS ALL API ENDPOINTS THAT USE MONGO"""
+import ast
 import sys
+from functools import wraps
+from flask import request, jsonify, session
+from __main__ import app
+from utility import user_jwt
+from entities.Product import Product
+from database.mongo_commands import insert_order, get_orders, boot_db, delete_order
 
 sys.path.append("mongo")
-from functools import wraps
-from flask import Flask, request, jsonify, session
-from flask_restful import Resource, Api, reqparse
-from pymongo import MongoClient
-from entities.Product import Product
-from database.mongo_commands import insert_order, get_orders, boot_db, delete_order, update_order
-from utility import user_jwt
 
-from __main__ import app
 app.secret_key = "super secret key"
 
-# laver en decorator istedet da det gør det lidt mere reusable
-def requires_user(f):
-    @wraps(f)
+
+def requires_user(_f):
+    """This allows you to lock other actions behind a JWT token"""
+
+    @wraps(_f)
     def wrapper(*args, **kwargs):
         if not request.headers.has_key("Authorization"):
             print("does not have header")
@@ -27,56 +28,69 @@ def requires_user(f):
         try:
             decoded = user_jwt.decode_access_token(token)
             session["user_id"] = decoded["sub"]
-        except Exception as e:
-            print(e)
+        except Exception as _e:
+            print(_e)
             return jsonify({"error": "You are not authorized"})
 
-        return f(*args, **kwargs)
+        return _f(*args, **kwargs)
 
     return wrapper
 
 
 @app.route("/mongo", methods=["GET"])
 def mongohome():
+    """This method simply allows us to test in Insomnia or
+    Postman whether or not our mongo service is running"""
     return "<h1>HVIS DU SER DETTE SÅ KØRER MONGO SERVEREN</h1>"
+
+
+def get_keys_from_dict(item):
+    '''This method returns the key from a dict'''
+    key_list = list(item.keys())
+    key = key_list[0]
+    return key
 
 
 # CREATES AN ORDER
 @app.route("/mongo/order/create", methods=["POST"])
 @requires_user
 def create_order():
+    """This receives data from an api call, and allows you to persist order in mongo"""
     user_id = session.get("user_id")
     data = request.get_json()
     list_of_products = []
     for element in data:
+        key = get_keys_from_dict(element)
+        value = element[key]
+        item = ast.literal_eval(value)
         product = Product(
-            element["product_id"],
-            element["product_name"],
-            element["product_brand"],
-            element["item_number"],
-            element["color"],
-            element["grill_type"],
-            element["amount_of_burners"],
-            element["bread_basket"],
-            element["amount_of_wheels"],
-            element["length_in_cm"],
-            element["width_in_cm"],
-            element["product_price"],
+            item["product_id"],
+            item["product_name"],
+            item["product_brand"],
+            item["item_number"],
+            item["color"],
+            item["grill_type"],
+            item["amount_of_burners"],
+            item["bread_basket"],
+            item["amount_of_wheels"],
+            item["length_in_cm"],
+            item["width_in_cm"],
+            item["product_price"],
         )
         list_of_products.append(product.return_product())
+    return insert_order(boot_db(), user_id, list_of_products)
 
-    insert_order(boot_db(), user_id, list_of_products)
-    return "Persisted order successfully"
 
 # GET ORDERS BY USER ID
 @app.route("/mongo/order", methods=["GET"])
 @requires_user
 def get():
+    """This returns all orders made by whatever user_id is in the JWT token in the API call"""
     return "Returned: " + get_orders(boot_db(), session.get("user_id"))
 
 
 # DELETES ORDER BY ORDER ID
 @app.route("/mongo/order/delete/<id>", methods=["DELETE"])
-def delete(id):
-    return "Returned: " + delete_order(boot_db(), str(id))
-
+def delete(_id):
+    """This deletes the order that contains the id given in the rest path"""
+    return "Returned: " + delete_order(boot_db(), str(_id))

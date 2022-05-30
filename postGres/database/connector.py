@@ -1,9 +1,10 @@
-from psycopg2 import connect
+'''THIS CLASS ENABLES US TO CONNECT TO OUR POSTGRES'''
 import os
+from psycopg2 import connect
 
-#establishing the connection
 
 def establish_connection():
+    '''This method allows us to connect to our docker-postgres service'''
     conn = connect(
         dbname = os.environ.get('POSTGRES_DB'),
         user = os.environ.get('POSTGRES_USER'),
@@ -12,17 +13,3 @@ def establish_connection():
         port = os.environ.get('POSTGRES_PORT')
     )
     return conn
-
-def get_version(conn):
-    #Creating a cursor object using the cursor() method
-    cursor = conn.cursor()
-
-    #Executing an MYSQL function using the execute() method
-    cursor.execute("select version()")
-
-    # Fetch a single row using fetchone() method.
-    data = cursor.fetchone()
-    print("Connection established to: ", data)
-
-    #Closing the connection
-    conn.close()
